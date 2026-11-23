@@ -123,6 +123,35 @@ En la barra superior aparecen tus archivos abiertos (`main.ts`, `app.ts`, etc.).
 | **Formatear documento completo** | `<leader>cf` (`Espacio` + `c` + `f`) |
 | **Seleccionar todo el archivo** | `ggVG` |
 
+### Ejemplo práctico: Comentar un bloque de código
+
+A continuación se muestra cómo comentar de forma ágil una función o bloque de varias líneas (por ejemplo, en TypeScript / Angular):
+
+```typescript
+onDeleteCharacter(index: number): void {
+  this.characters.splice(index, 1);
+}
+```
+
+#### Opción 1: Sombreando las 3 líneas (Visual Line)
+
+1. **Asegúrate de estar en Modo Normal:** Presiona `Esc`.
+2. **Navega hasta la función:** Baja 4 líneas hasta situarte en `onDeleteCharacter(index: number) : void {` (puedes escribir `4j` para saltar rápidamente).
+3. **Activa el Modo Visual por línea:** Presiona `Shift + v` (`V`) para sombrear la línea completa actual.
+4. **Extiende la selección:** Baja 2 líneas con `2j` (o `j` dos veces) hasta alcanzar la llave de cierre `}`.
+5. **Comenta el bloque:** Presiona `gc`. Todo el bloque quedará comentado con `//` al instante:
+
+```typescript
+// onDeleteCharacter(index: number): void {
+//   this.characters.splice(index, 1);
+// }
+```
+
+> **Nota:** Para descomentar el bloque, simplemente vuelve a seleccionarlo en Modo Visual (`Shift + v` y `2j`) y presiona `gc` nuevamente.
+
+#### Opción 2: Directamente desde Modo Normal (sin modo visual)
+* Estando ubicado sobre la línea de `onDeleteCharacter(...)`, presiona `gc2j` (o `3gcc`) para comentar la línea actual y las 2 siguientes de forma instantánea.
+
 ---
 
 ## 8. Inteligencia de Código (LSP: TypeScript, Angular, HTML)
