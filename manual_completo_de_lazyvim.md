@@ -6,11 +6,11 @@
 
 ## 1. Modos de Trabajo en Neovim
 
-Neovim funciona por modos. Si en algún momento te pierdes o escribes comandos sin querer, presiona **`Esc`** dos veces para volver al **Modo Normal**.
+Neovim funciona por modos. Si en algún momento te pierdes, escribes comandos sin querer o estás en modo Inserción, presiona **`Esc`** (o `Esc` dos veces) para volver al **Modo Normal**.
 
 | Modo | Cómo entrar | Para qué sirve |
 | :--- | :--- | :--- |
-| **Normal** | `Esc` | Navegar por el código, ejecutar atajos, copiar, pegar y borrar. |
+| **Normal** | `Esc` | Sale del modo Inserción (`-- INSERT --`) o cancela cuadros flotantes; navega por el código, ejecuta atajos, copia, pega y borra. |
 | **Inserción** | `i` (antes del cursor)<br>`a` (después del cursor)<br>`o` (nueva línea abajo)<br>`O` (nueva línea arriba) | Escribir código o texto normalmente. |
 | **Visual** | `v` (por carácter)<br>`Shift + v` (por línea completa)<br>`Ctrl + v` (bloque vertical) | Seleccionar bloques de texto para copiar, comentar o borrar. |
 | **Comandos** | `:` (en Modo Normal) | Ejecutar instrucciones como guardar (`:w`), salir (`:q`), abrir Mason (`:Mason`), etc. |
@@ -21,12 +21,14 @@ Neovim funciona por modos. Si en algún momento te pierdes o escribes comandos s
 
 | Acción | Atajo / Comando | Descripción |
 | :--- | :--- | :--- |
-| **Guardar archivo actual** | `Ctrl + s` o `:w` + `Enter` | Guarda los cambios del archivo activo. |
+| **Guardar archivo actual** | `Ctrl + s` o `:w` + `Enter` | Guarda los cambios del archivo actual. |
+| **Guardar y cerrar ventana** | `:wq` + `Enter` | Guarda el archivo actual y cierra la ventana. |
 | **Guardar todos los archivos** | `:wa` + `Enter` | Guarda todos los archivos modificados abiertos. |
+| **Guardar todo y salir de LazyVim** | `:wqa` + `Enter` | Guarda todos los archivos modificados y cierra LazyVim por completo. |
 | **Cerrar solo la pestaña actual** | `<leader>bd` (`Espacio` + `b` + `d`) | Cierra el archivo actual sin romper tus ventanas ni el explorador. |
 | **Cerrar pestaña sin guardar** | `:bd!` + `Enter` | Descarta los cambios y cierra el archivo actual. |
 | **Cerrar todas menos la actual** | `<leader>bo` (`Espacio` + `b` + `o`) | Mantiene abierta solo la pestaña en la que estás parado. |
-| **Salir de Neovim** | `<leader>qq` (`Espacio` + `q` + `q`) o `:qa` | Cierra todo el editor. |
+| **Salir de Neovim a PowerShell** | `<leader>qq` (`Espacio` + `q` + `q`) o `:qa` + `Enter` | Cierra todas las ventanas abiertas (incluyendo el panel lateral Explorer) y sale de LazyVim hacia PowerShell. |
 | **Salir forzando (sin guardar)** | `:qa!` + `Enter` | Cierra Neovim descartando todos los cambios pendientes. |
 
 ---
@@ -38,23 +40,35 @@ Neovim funciona por modos. Si en algún momento te pierdes o escribes comandos s
 * **Mover foco a la derecha (volver al código):** `Ctrl + l` (o `Ctrl + w` y luego `l` / `→`)
 * **Mover foco abajo / arriba entre ventanas:** `Ctrl + j` / `Ctrl + k` (o `Ctrl + w` y luego `j` / `k`)
 * **Alternar a la siguiente ventana:** `Ctrl + w` + `w` o `<leader>ww` (`Espacio` + `w` + `w`)
-* **Abrir / Enfocar / Cerrar Explorer:** `<leader>e` (`Espacio` + `e`)
+* **Abrir / Enfocar / Cerrar Explorer:** `<leader>e` (`Espacio` + `e`) — Abre o cierra el panel lateral del explorador de archivos (Explorer) para alternar entre navegación y lectura/escritura a pantalla completa.
 
-### Acciones dentro del Explorer (panel izquierdo)
-*(Asegúrate de haber presionado `Esc` si estabas en la barra naranja de búsqueda superior)*
+### Acciones y Filtrado dentro del Explorer (Snacks Explorer)
 
-| Tecla | Acción |
-| :--- | :--- |
-| `↑` / `↓` o `j` / `k` | Subir y bajar por archivos y carpetas. |
-| `Enter` o `l` | Abrir archivo o desplegar carpeta. |
-| `h` | Contraer carpeta actual. |
-| `a` | **Crear archivo o carpeta** (si termina en `/`, crea carpeta; ej: `components/`). |
-| `r` | **Renombrar** el archivo o carpeta seleccionada. |
-| `d` | **Eliminar** el archivo o carpeta seleccionada. |
-| `c` | Copiar archivo. |
-| `p` | Pegar archivo copiado. |
-| `y` | Copiar ruta del archivo. |
-| `q` o `<leader>e` | Cerrar el panel del Explorer. |
+| Acción | Atajo / Tecla | Descripción |
+| :--- | :--- | :--- |
+| **Moverse por el árbol** | `↑` / `↓` o `j` / `k` | Subir y bajar por archivos y carpetas. |
+| **Abrir o desplegar** | `Enter` o `l` | Abre el archivo seleccionado o expande/contrae una carpeta. |
+| **Contraer carpeta** | `h` | Pliega la carpeta actual. |
+| **Filtrar archivos en tiempo real** | `/` | Salta al cuadro de filtro superior (`>`) para filtrar archivos visibles. |
+| **Navegar en lista filtrada** | `Ctrl + j` / `Ctrl + k` (o `↑` / `↓`) | Moverse entre los resultados del filtro y abrir el archivo deseado con `Enter`. |
+| **Limpiar filtro y ver todo** | `Esc` (dos veces) | Sale del modo escritura del filtro y lo limpia para volver a ver todo el árbol. |
+| **Crear archivo o carpeta** | `a` | Crea un nuevo archivo o carpeta (si termina en `/`) mediante el recuadro flotante *Add a new file or directory*. |
+| **Renombrar** | `r` | Renombra el archivo o carpeta seleccionada. |
+| **Eliminar** | `d` | Elimina el archivo o carpeta seleccionada. |
+| **Copiar archivo** | `c` | Copia el archivo seleccionado. |
+| **Pegar archivo** | `p` | Pega el archivo previamente copiado. |
+| **Copiar ruta** | `y` | Copia la ruta del archivo al portapapeles. |
+| **Cerrar Explorer** | `q` o `<leader>e` (`Espacio` + `e`) | Cierra el panel lateral del explorador para volver a pantalla completa. |
+
+### Edición y Pegado en Cuadros Flotantes (Creación de Archivos)
+
+Al presionar `a` dentro del Explorer, se abre el recuadro flotante de entrada (*Add a new file or directory*) en modo Inserción:
+
+| Acción | Atajo / Combinación | Descripción |
+| :--- | :--- | :--- |
+| **Pegar desde el portapapeles de Windows** | `Ctrl + Shift + V` (o Clic derecho) | Pega texto desde el portapapeles de Windows dentro del recuadro flotante de creación de archivos en la terminal (Windows Terminal / WezTerm). |
+| **Pegar portapapeles en modo Inserción** | `Ctrl + r` seguido de `+` | Pega el contenido del portapapeles del sistema (`+`) directamente dentro del modo Inserción o línea de entrada de Neovim. |
+| **Salir o cancelar creación** | `Esc` | Sale del modo Inserción (`-- INSERT --`) y descarta el cuadro flotante, regresando al Modo Normal del Explorer. |
 
 ---
 
@@ -97,31 +111,61 @@ En la barra superior aparecen tus archivos abiertos (`main.ts`, `app.ts`, etc.).
 
 ## 6. Búsqueda Rápida de Archivos y Texto
 
-| Acción | Atajo | Descripción |
+### Búsqueda Global en el Proyecto (Archivos y Texto)
+
+| Acción | Atajo / Comando | Descripción |
 | :--- | :--- | :--- |
-| **Buscar y filtrar buffers abiertos** | `<leader>fb` (`Espacio` + `f` + `b`) | Lista interactiva para buscar y entrar a los buffers abiertos. |
-| **Buscar archivo por nombre** | `<leader><space>` (`Espacio` + `Espacio`) o `<leader>ff` | Abre el buscador de archivos del proyecto. |
-| **Buscar texto en todo el proyecto** | `<leader>/` (`Espacio` + `/`) o `<leader>sg` | Búsqueda global de texto (Live Grep / Ripgrep). |
-| **Archivos recientes** | `<leader>fr` (`Espacio` + `f` + `r`) | Lista los archivos abiertos recientemente. |
-| **Buscar palabra en archivo actual** | `/` + palabra + `Enter` (`n` sig., `N` ant.) | Búsqueda dentro del documento activo. |
-| **Quitar resaltado de búsqueda** | `Esc` | Limpia los resaltados amarillos de la última búsqueda. |
+| **Buscador global de archivos** | `<leader><space>` (`Espacio` + `Espacio`) o `<leader>ff` | Abre el buscador global de archivos en todas las carpetas y subcarpetas del proyecto. |
+| **Buscar texto en todo el proyecto** | `<leader>/` (`Espacio` + `/`) o `<leader>sg` | Búsqueda global de palabras o cadenas en todos los archivos a la vez (Live Grep / Ripgrep). |
+| **Buscar y filtrar buffers abiertos** | `<leader>fb` (`Espacio` + `f` + `b`) | Lista interactiva para buscar y saltar entre los archivos cargados en memoria. |
+| **Archivos recientes** | `<leader>fr` (`Espacio` + `f` + `r`) | Lista y filtra los archivos abiertos recientemente. |
+
+### Buscar Palabras dentro de un Archivo (Equivalente a Ctrl + F)
+
+| Acción | Atajo / Comando | Descripción |
+| :--- | :--- | :--- |
+| **Iniciar búsqueda hacia adelante** | `/` (en Modo Normal) + palabra + `Enter` | Escribe el término y presiona `Enter` para buscar hacia adelante desde el cursor. |
+| **Iniciar búsqueda hacia atrás** | `?` (en Modo Normal) + palabra + `Enter` | Busca ocurrencias hacia atrás en el archivo. |
+| **Siguiente coincidencia** | `n` | Salta a la siguiente coincidencia encontrada. |
+| **Anterior coincidencia** | `N` | Salta a la coincidencia anterior. |
+| **Ignorar mayúsculas y minúsculas** | `/\c` + palabra + `Enter` | Búsqueda insensible a mayúsculas/minúsculas (ej: `/\cguardar` halla `Guardar`, `GUARDAR`, `guardar`). |
+| **Quitar resaltado de búsqueda** | `Esc` o `:noh` + `Enter` | Limpia los resaltados amarillos de los resultados en pantalla (`:nohlsearch`). |
 
 ---
 
-## 7. Edición Rápida de Código (Modo Normal)
+## 7. Edición Rápida de Código y Operaciones sobre Archivos
 
-| Acción | Atajo |
-| :--- | :--- |
-| **Deshacer (Undo)** | `u` |
-| **Rehacer (Redo)** | `Ctrl + r` |
-| **Copiar línea completa** | `yy` |
-| **Cortar / Borrar línea completa** | `dd` |
-| **Pegar debajo / arriba** | `p` / `P` |
-| **Mover línea abajo / arriba** | `Alt + j` / `Alt + k` |
-| **Comentar / Descomentar línea** | `gcc` |
-| **Comentar bloque seleccionado (Modo Visual)** | `gc` |
-| **Formatear documento completo** | `<leader>cf` (`Espacio` + `c` + `f`) |
-| **Seleccionar todo el archivo** | `ggVG` |
+### Atajos Generales de Edición (Modo Normal)
+
+| Acción | Atajo / Comando | Descripción |
+| :--- | :--- | :--- |
+| **Deshacer (Undo)** | `u` | Revierte el último cambio realizado. |
+| **Rehacer (Redo)** | `Ctrl + r` | Rehace el cambio revertido. |
+| **Copiar línea completa** | `yy` | Copia la línea actual al registro interno. |
+| **Cortar / Borrar línea completa** | `dd` | Corta la línea actual. |
+| **Pegar debajo / arriba** | `p` / `P` | Pega el contenido copiado debajo o arriba del cursor. |
+| **Mover línea abajo / arriba** | `Alt + j` / `Alt + k` | Desplaza verticalmente la línea o bloque actual. |
+| **Comentar / Descomentar línea** | `gcc` | Alterna el comentario en la línea actual. |
+| **Comentar bloque seleccionado** | `gc` | Comenta el bloque sombreado en Modo Visual. |
+| **Pegar portapapeles en Inserción** | `Ctrl + r` seguido de `+` | Pega el contenido del portapapeles de Windows directamente desde el Modo Inserción de Neovim. |
+| **Formatear documento completo** | `<leader>cf` (`Espacio` + `c` + `f`) | Formatea el archivo activo mediante el formateador LSP (Prettier, etc.). |
+
+### Seleccionar, Copiar y Borrar Todo un Archivo
+
+Existen dos maneras eficientes de operar sobre la totalidad de un archivo:
+
+#### Método 1: Selección Visual Interactiva
+1. **`ggVG`**: Presiona `gg` (ir al inicio del archivo), `Shift + v` / `V` (activar modo visual por líneas) y `G` (extender la selección hasta el final).
+2. Con todo el archivo seleccionado:
+   * **`y`**: Copia todo el contenido al registro interno de Neovim.
+   * **`"+y`**: Copia todo el contenido directamente al **portapapeles de Windows** (listo para pegar con `Ctrl + V` en cualquier otra aplicación).
+   * **`d`**: Borra (corta) todo el contenido del archivo.
+
+#### Método 2: Comandos Rápidos Directos (Modo Comandos)
+Sin necesidad de seleccionar manualmente el texto:
+* **`:%y` + `Enter`**: Copia todo el archivo al registro interno de Neovim.
+* **`:%y+` + `Enter`**: Copia todo el archivo directamente al portapapeles de Windows.
+* **`:%d` + `Enter`**: Borra todo el contenido del archivo al instante.
 
 ### Ejemplo práctico: Comentar un bloque de código
 
@@ -134,11 +178,10 @@ onDeleteCharacter(index: number): void {
 ```
 
 #### Opción 1: Sombreando las 3 líneas (Visual Line)
-
 1. **Asegúrate de estar en Modo Normal:** Presiona `Esc`.
-2. **Navega hasta la función:** Baja 4 líneas hasta situarte en `onDeleteCharacter(index: number) : void {` (puedes escribir `4j` para saltar rápidamente).
-3. **Activa el Modo Visual por línea:** Presiona `Shift + v` (`V`) para sombrear la línea completa actual.
-4. **Extiende la selección:** Baja 2 líneas con `2j` (o `j` dos veces) hasta alcanzar la llave de cierre `}`.
+2. **Navega hasta la función:** Sitúate sobre `onDeleteCharacter(index: number): void {`.
+3. **Activa el Modo Visual por línea:** Presiona `Shift + v` (`V`).
+4. **Extiende la selección:** Baja 2 líneas con `2j` (o `j` dos veces) hasta la llave de cierre `}`.
 5. **Comenta el bloque:** Presiona `gc`. Todo el bloque quedará comentado con `//` al instante:
 
 ```typescript
@@ -171,23 +214,65 @@ Cuando estás sobre una variable, función o componente:
 
 ---
 
-## 9. Terminal Integrada
+## 9. Terminal Integrada y Navegación entre Paneles
 
-| Acción | Atajo |
-| :--- | :--- |
-| **Abrir / Ocultar terminal flotante** | `Ctrl + /` o `<leader>ft` |
-| **Salir del modo escritura en la terminal** | `Ctrl + \` + `Ctrl + n` |
-| **Cerrar terminal** | Escribir `exit` + `Enter` o `Ctrl + /` |
+Neovim incluye terminales integradas para ejecutar comandos de PowerShell sin abandonar el editor.
+
+| Acción | Atajo / Comando | Descripción |
+| :--- | :--- | :--- |
+| **Abrir / Ocultar terminal flotante** | `Ctrl + /` o `<leader>ft` | Abre o esconde una ventana flotante de PowerShell. |
+| **Salir del modo escritura en la terminal** | `Ctrl + \` y luego `Ctrl + n` | Pasa la terminal a Modo Normal para poder navegar o saltar a otros paneles. |
+| **Pasar de la consola al Explorer** | `Ctrl + w` + `h` (o `Ctrl + h`) | Mueve el foco desde la terminal hacia el panel izquierdo (Explorer o split contiguo). |
+| **Pasar del Explorer / editor a la consola** | `Ctrl + w` + `j` (o `Ctrl + j`) | Mueve el foco hacia la consola situada abajo. |
+| **Reactivar la escritura en la consola** | `i` (o `a`) | Vuelve a activar el modo interactivo para escribir comandos en la terminal. |
+| **Cerrar terminal** | Escribir `exit` + `Enter` o `Ctrl + /` | Finaliza la sesión de shell o cierra la terminal flotante. |
 
 ---
 
-## 10. Gestión de Plugins, Lenguajes y Temas
+## 10. Corrector Ortográfico (Rayas Rojas y Spellcheck)
+
+Las rayas rojas onduladas debajo de las palabras indican que el corrector ortográfico (*spellcheck*) de Neovim está detectando un posible error de escritura. Puedes activarlo, configurarlo o deshabilitarlo fácilmente.
+
+| Acción | Atajo / Comando | Descripción |
+| :--- | :--- | :--- |
+| **Activar / Desactivar rayas rojas (temporal)** | `<leader>us` (`Espacio` + `u` + `s`) o `:set spell!` | Alterna el corrector ortográfico en el archivo actual. |
+| **Desactivar corrector en archivo actual** | `:set nospell` + `Enter` | Quita de inmediato el subrayado rojo en el archivo activo. |
+| **Activar corrección en inglés y español** | `:set spelllang=en,es` + `Enter` | Permite que el corrector valide palabras tanto en inglés como en español simultáneamente. |
+| **Abrir buscador de archivos de configuración** | `<leader>fc` (`Espacio` + `f` + `c`) | Atajo directo para buscar y abrir archivos de configuración (`options.lua`, etc.). |
+
+### Desactivar el subrayado ortográfico permanentemente
+
+Si prefieres trabajar sin corrector ortográfico en todos tus proyectos:
+
+1. Presiona `<leader>fc` (`Espacio` + `f` + `c`) y selecciona `options.lua` (o abre directamente el archivo `$env:LOCALAPPDATA\nvim\lua\config\options.lua`).
+2. Agrega la siguiente opción de configuración:
+
+```lua
+-- Desactivar el corrector ortográfico permanentemente (sin rayas rojas)
+vim.opt.spell = false
+```
+
+3. Guarda con `Ctrl + s`. Neovim aplicará el ajuste inmediatamente.
+
+---
+
+## 11. Gestión de Plugins, Lenguajes y Temas
 
 ### Comandos principales de mantenimiento
 * **`:Lazy`** — Abre el gestor de plugins (presiona `U` para actualizar todos los plugins, `S` para sincronizar).
-* **`:LazyExtras`** — Activa o desactiva soporte completo para lenguajes (ej. `lang.typescript`, `lang.angular`, `lang.json`) usando la tecla `x`.
+* **`:LazyExtras`** — Abre el menú de extras oficiales de LazyVim para activar o desactivar soporte extendido de lenguajes y herramientas (ej. `lang.typescript`, `lang.angular`, `lang.markdown`) presionando `x`.
 * **`:Mason`** — Abre el gestor de servidores LSP, linters y formateadores (`i` para instalar, `u` para actualizar, `X` para desinstalar).
 * **`:checkhealth`** — Diagnostica si falta alguna dependencia en Windows (Node.js, Git, Ripgrep, compilador C, etc.).
+
+### Visualización y Renderizado de Markdown (`lang.markdown`)
+
+Al habilitar `lang.markdown` en `:LazyExtras` (presionando `x`), LazyVim activa el soporte avanzado para archivos `.md` con renderizado en el editor y vista previa en el navegador:
+
+| Acción | Atajo / Comando | Descripción |
+| :--- | :--- | :--- |
+| **Menú de LazyExtras** | `:LazyExtras` + `Enter` | Abre el menú de extras oficiales de LazyVim (donde activas `lang.markdown` presionando `x` para habilitar el renderizado de tablas, títulos y listas). |
+| **Alternar renderizado visual en editor** | `<leader>um` (`Espacio` + `u` + `m`) | Activa o desactiva el renderizado visual de Markdown dentro del editor (Modo Normal) para alternar entre escritura limpia en texto plano y vista formateada. |
+| **Vista previa en el navegador web** | `<leader>cp` (`Espacio` + `c` + `p`) o `:MarkdownPreview` | Abre una vista previa renderizada en tiempo real del archivo `.md` en tu navegador web. |
 
 ### Estructura de carpetas de configuración en Windows
 Tu configuración vive en `%LOCALAPPDATA%\nvim\` (`C:\Users\TuUsuario\AppData\Local\nvim\`):
@@ -225,3 +310,17 @@ return {
   },
 }
 ```
+
+---
+
+## 12. Gestión de la Ventana de la Terminal en Windows con el Teclado
+
+Atajos del sistema operativo Windows 11 y emuladores de terminal (Windows Terminal / WezTerm) para organizar, desplazar y redimensionar ventanas sin levantar las manos del teclado:
+
+| Acción | Atajo de Teclado | Descripción |
+| :--- | :--- | :--- |
+| **Acoplar a mitad izquierda / derecha** | `Win` (⊞) + `←` / `Win` (⊞) + `→` | Acopla la ventana de la terminal exactamente en la mitad izquierda o derecha de la pantalla (*Snap Assist*). |
+| **Maximizar, minimizar o cuartos de pantalla** | `Win` (⊞) + `↑` / `Win` (⊞) + `↓` | Maximiza la ventana (`Win + ↑`), la restaura o minimiza (`Win + ↓`), o la ajusta a un cuarto de pantalla. |
+| **Mover ventana entre monitores** | `Win` (⊞) + `Shift` + `←` / `→` | Traslada la ventana directamente a la pantalla contigua conservando sus dimensiones. |
+| **Mover ventana libremente con teclado** | `Alt` + `Barra espaciadora`, luego `M`, flechas (`←` `↑` `↓` `→`) y `Enter` | Abre el menú de control de ventana de Windows, activa el modo mover (`M`), desplaza la ventana con las flechas y confirma con `Enter`. |
+| **Desplegar / Ocultar modo Quake** | `Win` (⊞) + `Alt` + `º` | Despliega u oculta la terminal en modo desplegable superior rápido (ventana emergente *Quake* en Windows Terminal). |
