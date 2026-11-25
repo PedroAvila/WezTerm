@@ -442,3 +442,56 @@ vim.diagnostic.jump({ count = 1, float = true })
 | **Gestor de servidores/herramientas** | `:Mason` | Abre Mason para instalar servidores LSP, linters o formateadores (presiona `i` sobre un paquete para instalarlo). |
 | **Gestor de plugins (`lazy.nvim`)** | `:Lazy` o `<leader>l` | Abre el panel de plugins (`U` para actualizar o `q` para salir). |
 | **Explorar atajos activos** | `<leader>sk` | Abre el buscador para inspeccionar todos los keymaps cargados actualmente. |
+
+### 13.6 Uso de Telescope y File Browser (Estilo *devaslife*)
+
+Esta configuración personalizada de [`nvim-telescope/telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) junto con [`telescope-file-browser.nvim`](https://github.com/nvim-telescope/telescope-file-browser.nvim) replica el flujo de trabajo rápido de *devaslife* (por ejemplo, guardado en `$env:LOCALAPPDATA\nvim\lua\plugins\editor.lua` o `telescope.lua`).
+
+> **Importante sobre requisitos en LazyVim:**
+> * Esta configuración carga la extensión `"fzf"` (`require("telescope").load_extension("fzf")`) y usa `live_grep` con `ripgrep` (`rg`). Asegúrate de tener activo el extra `editor.telescope` en `:LazyExtras` (o declarado `telescope-fzf-native.nvim` en tus plugins) para evitar errores al iniciar Telescope.
+> * En esta configuración, la tecla **`;`** funciona como prefijo rápido de búsqueda (en lugar de esperar `<leader>`). Al presionar `;`, Neovim aguardará brevemente la segunda tecla (`f`, `r`, `t`, `;`, `e` o `s`).
+
+#### Atajos principales de Telescope (Modo Normal)
+
+| Atajo | Secuencia | Función de Telescope | Cómo se usa en la práctica |
+| :--- | :--- | :--- | :--- |
+| **`;f`** | `;` luego `f` | `find_files` | Busca **archivos por nombre** en el proyecto actual. Incluye archivos ocultos (`.env`, `.gitignore`, etc.), pero respeta lo ignorado por `.gitignore`. |
+| **`;r`** | `;` luego `r` | `live_grep` | Busca **texto o código en tiempo real** dentro de todo el proyecto (usa `ripgrep`). Escribe la palabra y verás archivo, línea y vista previa al instante. |
+| **`\\`** | `\` dos veces | `buffers` | Lista únicamente los **archivos (buffers) abiertos** en memoria para cambiar rápidamente entre ellos. |
+| **`;t`** | `;` luego `t` | `help_tags` | Busca en la **documentación oficial de Neovim y plugins** (útil para consultar comandos o configuración de Lua). |
+| **`;;`** | `;` dos veces | `resume` | **Reanuda la última búsqueda** de Telescope exactamente donde la dejaste (conserva el texto que escribiste y el resultado seleccionado). |
+| **`;e`** | `;` luego `e` | `diagnostics` | Muestra los **errores y advertencias del LSP** en un panel inferior compacto (tema `ivy`). Se abre directamente en **Modo Normal** y sin vista previa para leer la lista completa con claridad. |
+| **`;s`** | `;` luego `s` | `treesitter` | Lista los **símbolos del archivo actual** (funciones, clases, métodos, interfaces, variables) detectados por Tree-sitter para saltar directo a ellos. |
+| **`sf`** | `s` luego `f` | `file_browser` | Abre el **explorador de archivos de Telescope** posicionado en la **carpeta del archivo actual**. |
+| **`<leader>fP`** | `Espacio`, `f`, `Shift + p` | `find_files` (plugins) | Busca archivos directamente dentro de la **carpeta de plugins instalados** por `lazy.nvim` (útil para revisar código fuente de plugins). |
+
+#### Comportamiento visual de las ventanas de Telescope
+
+Con las opciones configuradas en `opts.defaults`:
+* **Barra de búsqueda arriba (`prompt_position = "top"`):** El cuadro para escribir aparece en la parte superior y los mejores resultados se ordenan hacia abajo (`sorting_strategy = "ascending"`).
+* **Ajuste de líneas largas (`wrap_results = true`):** Si una ruta o línea de resultado es muy larga, se envuelve en múltiples líneas en lugar de cortarse.
+* **Reemplazo de `netrw` (`hijack_netrw = true`):** Si abres una carpeta directamente (por ejemplo `nvim .` desde PowerShell o `:e .`), Neovim abrirá `telescope-file-browser` en lugar del explorador clásico `netrw`.
+
+#### Cómo usar el Explorador de Archivos (`sf`) paso a paso
+
+A diferencia de `;f` o `;r` (que abren listos para escribir), **`sf` se abre en Modo Normal (`initial_mode = "normal"`)**, sin vista previa (`previewer = false`), mostrando archivos ocultos (`hidden = true`), incluyendo archivos ignorados por Git (`respect_gitignore = false`) y agrupando primero las carpetas (`grouped = true`).
+
+Si presionas letras nada más abrir `sf`, no escribirás en el buscador: ejecutarás acciones de navegación. Úsalo así:
+
+| Acción dentro de `sf` | Tecla / Atajo | Descripción |
+| :--- | :--- | :--- |
+| **Moverse por la lista** | `j` / `k` o `↓` / `↑` | Baja o sube entre carpetas y archivos. |
+| **Salto rápido hacia arriba** | `Ctrl + u` | Sube **10 posiciones** de golpe en la lista (mapeo personalizado). |
+| **Abrir archivo o entrar a carpeta** | `Enter` | Abre el archivo seleccionado en el editor o entra en la carpeta seleccionada. |
+| **Subir a la carpeta padre** | `h` | Retrocede un nivel hacia la carpeta superior (`..`). |
+| **Filtrar escribiendo** | `/` | Cambia a **Modo Inserción** para escribir en la barra superior y filtrar la carpeta actual. Presiona `Esc` para volver al Modo Normal. |
+| **Crear archivo o carpeta** | `N` (`Shift + n`) | Abre el recuadro para crear un elemento en la carpeta actual: escribe `archivo.ts` para un archivo o `carpeta/` (terminado en `/`) para crear un directorio, y confirma con `Enter`. |
+| **Desplazar vista previa** | `PageUp` / `PageDown` | Sube o baja el contenido de la vista previa (en vistas donde el previewer esté habilitado). |
+| **Cerrar el explorador** | `Esc` (en Modo Normal) o `q` | Cierra `telescope-file-browser` y regresa al código sin hacer cambios. |
+
+> **Flujo típico recomendado con esta configuración:**
+> 1. Presiona `;f` para saltar rápido a cualquier archivo del proyecto por nombre.
+> 2. Presiona `;r` para buscar una función o texto específico en todo el código.
+> 3. Si cerraste el buscador y quieres volver al mismo resultado, presiona `;;`.
+> 4. Si necesitas crear un archivo hermano junto al archivo que estás editando, presiona `sf`, luego `N`, escribe el nombre y pulsa `Enter`.
+> 5. Si quieres revisar errores del proyecto sin usar el ratón, presiona `;e`, muévete con `j`/`k` y pulsa `Enter` para ir directo a la línea del error.
