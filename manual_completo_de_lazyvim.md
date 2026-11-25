@@ -1,5 +1,11 @@
 # Manual Completo de LazyVim (Neovim)
 
+Para abrir la configuración de LazyVim desde PowerShell:
+
+```powershell
+cd "$env:LOCALAPPDATA\nvim\lua"
+```
+
 > **Nota clave:** En LazyVim, la tecla `<leader>` (líder) es la **barra espaciadora (`Espacio`)**. Cuando veas una secuencia como `<leader>bd`, presiona **`Espacio`**, suéltalo, presiona **`b`**, suéltalo y presiona **`d`** (no las mantengas presionadas a la vez).
 
 ---
@@ -290,6 +296,25 @@ nvim/
         └── colorscheme.lua  # Archivos donde agregas plugins o temas personalizados
 ```
 
+### Abrir y editar la configuración desde PowerShell
+
+Para navegar directamente a la carpeta donde residen tus archivos de configuración (`config/`, `plugins/`, etc.) desde PowerShell:
+
+```powershell
+cd "$env:LOCALAPPDATA\nvim\lua"
+```
+
+> **Consejo práctico:**
+> * Una vez dentro de esa carpeta, puedes abrir la configuración completa en Neovim ejecutando:
+>   ```powershell
+>   nvim .
+>   ```
+> * O puedes abrir directamente la configuración sin cambiar de directorio con:
+>   ```powershell
+>   nvim "$env:LOCALAPPDATA\nvim\lua"
+>   ```
+> * Dentro de Neovim, también puedes presionar `<leader>fc` (`Espacio` + `f` + `c`) para buscar y abrir cualquier archivo de configuración rápidamente.
+
 ### Ejemplo: Configurar Tema Estilo Sublime Text 4 (`lua/plugins/colorscheme.lua`)
 
 ```lua
@@ -324,3 +349,96 @@ Atajos del sistema operativo Windows 11 y emuladores de terminal (Windows Termin
 | **Mover ventana entre monitores** | `Win` (⊞) + `Shift` + `←` / `→` | Traslada la ventana directamente a la pantalla contigua conservando sus dimensiones. |
 | **Mover ventana libremente con teclado** | `Alt` + `Barra espaciadora`, luego `M`, flechas (`←` `↑` `↓` `→`) y `Enter` | Abre el menú de control de ventana de Windows, activa el modo mover (`M`), desplaza la ventana con las flechas y confirma con `Enter`. |
 | **Desplegar / Ocultar modo Quake** | `Win` (⊞) + `Alt` + `º` | Despliega u oculta la terminal en modo desplegable superior rápido (ventana emergente *Quake* en Windows Terminal). |
+
+---
+
+## 13. Configuración Personalizada Estilo *devaslife* en Windows
+
+> **Nota importante:** Esta sección documenta la configuración inspirada en *devaslife* (Takuya Matsuyama) adaptada a **Windows**. Se mantiene separada de los atajos predeterminados de LazyVim (secciones 4–8) porque sobrescribe teclas estándar en `lua/config/keymaps.lua` (como `dw`, `ss`/`sv`, `sh`/`sj`/`sk`/`sl`, `<C-a>` o `<Tab>`). Si utilizas esta configuración, estos atajos reemplazan o complementan a los valores por defecto.
+
+### 13.1 Estructura y Rutas en Windows
+
+En los tutoriales de macOS/Linux suele aparecer `~/.config/nvim`. En Windows, tu directorio principal de configuración es `%LOCALAPPDATA%\nvim`.
+
+```powershell
+cd "$env:LOCALAPPDATA\nvim"
+```
+
+Archivos clave dentro de esta configuración:
+
+* `init.lua`: Punto de entrada que carga `lazy.nvim` y tus configuraciones.
+* `lua/config/keymaps.lua`: Tus atajos de teclado personalizados.
+* `lua/config/options.lua`: Opciones generales del editor.
+* `lua/config/autocmds.lua`: Autocomandos.
+* `lua/plugins/colorscheme.lua`: Configuración de tema visual (por ejemplo, `solarized-osaka.nvim`).
+
+### 13.2 Herramientas de Búsqueda en Terminal (`fd` y `rg`)
+
+Instaladas mediante `winget` para búsquedas rápidas desde PowerShell y como motor para búsquedas dentro de LazyVim:
+
+| Herramienta / Comando | Uso en PowerShell | Equivalente en LazyVim | Descripción |
+| :--- | :--- | :--- | :--- |
+| **`fd <patrón>`** | `fd lua` | `<leader>ff` o `<leader><space>` | Busca **archivos y carpetas por su nombre** (en el ejemplo, lista rutas relacionadas con `lua`). |
+| **`rg <texto>`** (*ripgrep*) | `rg lazy` | `<leader>sg` o `<leader>/` | Busca **texto dentro del contenido de los archivos** mostrando archivo y número de línea. |
+
+### 13.3 Atajos Configurados en `lua/config/keymaps.lua`
+
+La mayoría de estos atajos están mapeados en **Modo Normal (`"n"`)** con `{ noremap = true, silent = true }`:
+
+#### Edición, Selección, Números y Jumplist
+
+| Categoría | Atajo | Acción / Mapeo | Descripción |
+| :--- | :--- | :--- | :--- |
+| **Números** | `+` | `<C-a>` | Incrementa el número bajo el cursor. |
+| **Números** | `-` | `<C-x>` | Decrementa el número bajo el cursor. |
+| **Borrado** | `dw` | `vb_d` | Borra una palabra hacia atrás. |
+| **Selección** | `<C-a>` | `gg<S-v>G` | Selecciona todo el buffer. *(Nota: en algunas terminales de Windows conviene revisar si `<C-a>` es interceptado por el sistema o usar `<leader>a`).* |
+| **Jumplist** | `<C-m>` | `<C-i>` | Salta hacia adelante en la lista de saltos. |
+
+#### Pestañas (Tabs), Ventanas (Splits) y Redimensionado
+
+| Categoría | Atajo | Acción / Mapeo | Descripción |
+| :--- | :--- | :--- | :--- |
+| **Pestañas** | `te` | `:tabedit` | Abre una nueva pestaña. |
+| **Pestañas** | `<Tab>` | `:tabnext<Return>` | Cambia a la siguiente pestaña. |
+| **Pestañas** | `<S-Tab>` | `:tabprev<Return>` | Cambia a la pestaña anterior. |
+| **Splits** | `ss` | `:split<Return>` | Divide la ventana en horizontal. |
+| **Splits** | `sv` | `:vsplit<Return>` | Divide la ventana en vertical. |
+| **Navegación** | `sh` | `<C-w>h` | Mueve el foco a la ventana de la **izquierda**. |
+| **Navegación** | `sk` | `<C-w>k` | Mueve el foco a la ventana de **arriba**. |
+| **Navegación** | `sj` | `<C-w>j` | Mueve el foco a la ventana de **abajo**. |
+| **Navegación** | `sl` | `<C-w>l` | Mueve el foco a la ventana de la **derecha**. |
+| **Redimensionar** | `<C-w><Left>` | `<C-w><` | Reduce el ancho de la ventana. |
+| **Redimensionar** | `<C-w><Right>` | `<C-w>>` | Aumenta el ancho de la ventana. |
+| **Redimensionar** | `<C-w><Up>` | `<C-w>+` | Aumenta el alto de la ventana. |
+| **Redimensionar** | `<C-w><Down>` | `<C-w>-` | Reduce el alto de la ventana. |
+
+#### Diagnósticos (LSP)
+
+* **`<C-j>`**: Salta al siguiente diagnóstico mostrando una ventana flotante:
+
+```lua
+vim.diagnostic.jump({ count = 1, float = true })
+```
+
+### 13.4 Operaciones Rápidas de Edición y Ventanas
+
+* **Duplicar una línea (Modo Normal):** `yyp` (copia la línea actual y la pega debajo).
+* **Duplicar un bloque de líneas:** `Shift + v` para seleccionar líneas, moverse con `j`/`k` (o flechas), luego `y` para copiar y `p` para pegar.
+
+| Acción | Atajo / Comando | Descripción |
+| :--- | :--- | :--- |
+| **Dejar solo la ventana activa** | `:only` | Cierra las demás divisiones y mantiene únicamente la ventana actual. |
+| **Guardar archivo actual** | `:w` | Guarda los cambios del archivo activo. |
+| **Cerrar todo y salir** | `:qa` | Cierra todas las ventanas/pestañas y sale de Neovim. |
+| **Salir sin guardar** | `:qa!` | Sale de Neovim forzadamente descartando cambios. |
+| **Cerrar ventanas flotantes** | `Esc` o `q` | Cierra cuadros flotantes de documentación, ayuda o reportes. |
+
+### 13.5 Verificación de Diagnóstico, LSP y Gestión de Plugins
+
+| Herramienta / Acción | Comando o Atajo | Descripción |
+| :--- | :--- | :--- |
+| **Estado del LSP (ej. `lua_ls`)** | `:checkhealth lsp` | Verifica la salud de los servidores LSP (presiona `q` para salir de la ventana). |
+| **Gestor de servidores/herramientas** | `:Mason` | Abre Mason para instalar servidores LSP, linters o formateadores (presiona `i` sobre un paquete para instalarlo). |
+| **Gestor de plugins (`lazy.nvim`)** | `:Lazy` o `<leader>l` | Abre el panel de plugins (`U` para actualizar o `q` para salir). |
+| **Explorar atajos activos** | `<leader>sk` | Abre el buscador para inspeccionar todos los keymaps cargados actualmente. |

@@ -58,6 +58,11 @@ Any manual, shortcut, or setting suggested by an agent must strictly align with 
   * Documentation: Descriptive lowercase names separated by hyphens or underscores (`.md`).
   * Scripts/Configurations: `.lua`, `.ps1` as appropriate.
 
+### D. Direct File Access & Token Efficiency (Exact File Targeting)
+* **Strict rule:** When the user provides an exact file name, path, or mention (e.g. `@[filename]`), the agent **MUST NOT** search, list, or read other unrelated files in the repository.
+* Go straight to the target file, perform the required read or edit, and finish the task without wasting time or consuming extra tokens.
+* See [`adrs/0001-acceso-directo-a-archivos-especificados.md`](file:///D:/WezTerm/adrs/0001-acceso-directo-a-archivos-especificados.md) for full context and architecture decision records.
+
 ---
 
 ## 📝 4. Formatting Standards for Markdown Documentation
@@ -80,6 +85,7 @@ When creating or editing Markdown files in this repository, follow these guideli
 | File | Description |
 | :--- | :--- |
 | [`AGENTS.md`](file:///D:/WezTerm/AGENTS.md) | Fundamental rules, guidelines, and standards for AI agents and collaborators. |
+| [`adrs/0001-acceso-directo-a-archivos-especificados.md`](file:///D:/WezTerm/adrs/0001-acceso-directo-a-archivos-especificados.md) | Architecture Decision Record: Direct file access and token efficiency rule. |
 | [`manual-wezterm.md`](file:///D:/WezTerm/manual-wezterm.md) | Quick reference manual and custom configuration for WezTerm using `Ctrl + Alt`. |
 | [`manual_completo_de_lazyvim.md`](file:///D:/WezTerm/manual_completo_de_lazyvim.md) | Comprehensive guide to LazyVim (modes, buffers, splits, shortcuts, LSP, Mason, and themes). |
 | [`gu_a_de_instalaci_n_neovim_lazyvim_en_windows_11.md`](file:///D:/WezTerm/gu_a_de_instalaci_n_neovim_lazyvim_en_windows_11.md) | Step-by-step tool provisioning guide with `winget`, GCC configuration, and Angular/TypeScript support. |
