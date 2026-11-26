@@ -201,6 +201,26 @@ onDeleteCharacter(index: number): void {
 #### Opción 2: Directamente desde Modo Normal (sin modo visual)
 * Estando ubicado sobre la línea de `onDeleteCharacter(...)`, presiona `gc2j` (o `3gcc`) para comentar la línea actual y las 2 siguientes de forma instantánea.
 
+### Ejemplo práctico: Copiar una palabra específica dentro de una línea
+
+En **Modo Normal** (asegúrate de no estar en Modo Inserción — presiona `Esc` si ves el cursor de inserción), teniendo el cursor en cualquier parte de una línea como:
+
+```html
+(keyup.enter)="addTodo()"
+```
+
+Si quieres copiar únicamente el nombre del método `addTodo`:
+
+#### Opción 1: Forma más rápida (`f` + `y` + `w`)
+1. Presiona `f` y luego `a` para saltar directo a la `a` de `addTodo` dentro de la misma línea.
+2. Presiona `yw` para copiar `addTodo`.
+
+> **Nota:** `f<carácter>` busca hacia adelante en la línea actual hasta la primera coincidencia del carácter indicado (`a`), y `yw` (*yank word*) copia la palabra desde el cursor hasta el límite antes de `()`.
+
+#### Opción 2: Usar la búsqueda (`/`)
+1. Presiona `/addTodo` y luego `Enter` para colocar el cursor al inicio de `addTodo`.
+2. Presiona `yw` para copiar la palabra.
+
 ---
 
 ## 8. Inteligencia de Código (LSP: TypeScript, Angular, HTML)
