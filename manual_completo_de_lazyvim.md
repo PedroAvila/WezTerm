@@ -95,6 +95,21 @@ En la barra superior aparecen tus archivos abiertos (`main.ts`, `app.ts`, etc.).
 | **Cerrar todos menos el actual** | `<leader>bo` (`Espacio` + `b` + `o`) | Cierra el resto de buffers y conserva el activo. |
 | **Fijar / Desfijar pestaña (Pin)** | `<leader>bp` (`Espacio` + `b` + `p`) | Fija el buffer para que no se cierre automáticamente. |
 
+### Enfocar o abrir `app.component.ts` en una pestaña nueva (sin cerrar buffers)
+
+Cuando tienes el proyecto dividido en ventanas (por ejemplo, `app.component.ts` en la ventana derecha) y necesitas ver ese archivo a pantalla completa **sin perder los demás archivos abiertos**:
+
+1. **Enfoca el archivo:** asegúrate de tener el cursor dentro de `app.component.ts` (en la ventana derecha). Puedes moverte hasta ahí con `Ctrl + l` (o `Ctrl + w` y luego `l`).
+2. **Abre la ventana actual en una pestaña nueva:** en Modo Normal, escribe `:tab split` y presiona `Enter`:
+
+```vim
+:tab split
+```
+
+> **Nota clave:** El comando `:tab split` duplica la ventana activa dentro de una pestaña nueva, manteniendo **todas las demás ventanas y buffers abiertos**. No es lo mismo que `:tabedit` (que abre un archivo nuevo) ni que `<leader>bd` (que cierra el buffer actual).
+
+**Verificación:** aparece una nueva pestaña en la barra superior y `app.component.ts` pasa a ocupar todo el ancho del área de edición. Para volver a la disposición anterior, cierra esa pestaña con `:tabclose` o `<leader>bd`.
+
 ---
 
 ## 5. División de Pantalla y Gestión de Ventanas (Splits)
