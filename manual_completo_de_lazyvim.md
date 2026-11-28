@@ -253,6 +253,28 @@ Cuando estás sobre una variable, función o componente:
 | **Siguiente / Anterior error** | `]d` / `[d` |
 | **Ver estado de servidores LSP activos** | `:LspInfo` + `Enter` |
 
+### Saltar a la definición y volver al archivo anterior (jumplist)
+
+Cuando quieras inspeccionar de dónde viene un tipo o símbolo (por ejemplo, `UserInterface` dentro de `@Input() users: UserInterface[];`) y después regresar exactamente a donde estabas:
+
+1. **Salta a la definición con `gd`:** asegúrate de estar en **Modo Normal** (pulsa `Esc` si hace falta) con el cursor sobre `UserInterface` y presiona `gd` (*go to definition*):
+
+```vim
+gd
+```
+
+2. **Vuelve a `users-list.component.ts` cuando termines:** para regresar al punto exacto anterior al salto, presiona `Ctrl + o` (*jump back*) en Modo Normal:
+
+```vim
+<C-o>
+```
+
+> **Nota clave:** `gd` usa el LSP para abrir la declaración del símbolo y deja un registro en la *jumplist* de Neovim. `Ctrl + o` retrocede por esa lista (para avanzar de nuevo, usa `Ctrl + i`). Son atajos complementarios: ir a la definición y volver sin perder el lugar.
+
+**Verificación:**
+1. Al presionar `gd`, Neovim abre el archivo donde está declarada `UserInterface` (por ejemplo `user.interface.ts`) y coloca el cursor sobre `export interface UserInterface`.
+2. Al presionar `Ctrl + o`, vuelves a la línea `@Input() users: UserInterface[];` en `users-list.component.ts`.
+
 ---
 
 ## 9. Terminal Integrada y Navegación entre Paneles
